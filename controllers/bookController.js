@@ -1,7 +1,8 @@
+import mongoose from "mongoose";
 import { Book } from "../models/Book.js";
 
 //Create
-export const createBook = async (req, res) => {
+const createBook = async (req, res) => {
     try {
         const { title, author, genre } = req.body;
         if (!title || !author || !genre) {
@@ -19,7 +20,7 @@ export const createBook = async (req, res) => {
 };
 
 //Read All
-export const getAllBooks = async (req, res) => {
+const getAllBooks = async (req, res) => {
     try {
         const books = await Book.find({});
 
@@ -35,7 +36,7 @@ export const getAllBooks = async (req, res) => {
 };
 
 //Read by ID
-export const getBookById = async (req, res) => {
+const getBookById = async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -52,3 +53,31 @@ export const getBookById = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
+
+//Update
+const updateBookName = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "No such book" });
+    }
+
+    try {
+        const book = await Book.findOneAndUpdate(
+            { _id: id },
+            { ...req.body },
+            { new: true }
+        )
+
+        if (!book) {
+            return res.status(404).json({ error: "No such book" });
+        }
+
+        res.status(200).json(book);
+
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+export { createBook, getAllBooks, getBookById, updateBookName };
