@@ -1,5 +1,6 @@
 import { Book } from "../models/Book.js";
 
+//Create
 export const createBook = async (req, res) => {
     try {
         const { title, author, genre } = req.body;
@@ -17,6 +18,7 @@ export const createBook = async (req, res) => {
     }
 };
 
+//Read All
 export const getAllBooks = async (req, res) => {
     try {
         const books = await Book.find({});
@@ -32,6 +34,7 @@ export const getAllBooks = async (req, res) => {
     }
 };
 
+//Read by ID
 export const getBookById = async (req, res) => {
     try {
         const { id } = req.params;
