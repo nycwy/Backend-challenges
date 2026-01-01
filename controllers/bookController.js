@@ -31,3 +31,21 @@ export const getAllBooks = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
+
+export const getBookById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const book = await Book.findById(id);
+
+        if (!book) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        res.status(200).json(book);
+
+    } catch (error) {
+        console.error("Error fetching book:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};
