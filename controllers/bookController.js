@@ -80,4 +80,24 @@ const updateBookName = async (req, res) => {
     }
 }
 
-export { createBook, getAllBooks, getBookById, updateBookName };
+//Delete
+const deleteBook = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: "No such book" });
+    }
+
+    try {
+        const book = await Book.findOneAndDelete({ _id: id });
+
+        if (!book) {
+            return res.status(404).json({ error: "No such book" });
+        }
+        res.status(200).json({ message: "Book deleted successfully", book });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
+export { createBook, getAllBooks, getBookById, updateBookName, deleteBook };
